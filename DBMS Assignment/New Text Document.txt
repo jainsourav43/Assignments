@@ -1,0 +1,330 @@
+create table airport(
+airport_code int primary key,
+city varchar(20) not null,
+state varchar(20)not null,
+aname varchar(20) not null);
+
+insert into airport values(&airport_code, '&aname', '&city', '&state');
+
+AIRPORT_CODE           ANAME                STATE                CITY                
+---------------------- -------------------- -------------------- -------------------- 
+1                      IGI                  NEW DELHI            NEW DELHI            
+2                      SMS                  JAIPUR               RJ                   
+3                      RGI                  HYDERABAD            TS                   
+4                      DXB                  DUBAI                DUBAI                
+5                      VICTORIA             MUMBAI               MH  
+
+
+
+create table flight(
+fnumber int primary key,
+airline varchar(20),
+weekdays varchar(20),
+foreign key(airline) references airplane_type(company));
+
+insert into flight values(&fnumber, '&airline', '&weekdays');
+
+FNUMBER                AIRLINE              WEEKDAYS             
+---------------------- -------------------- -------------------- 
+1                      EMIRATES             MT1WT2FS1S2                 
+2                      QANTAS               T1WF              
+3                      CATHAY PACIFIC       WFS1            
+4                      EMIRATES             T2FS2             
+5                      QANTAS               MWF               
+6                      CATHAY PACIFIC       T1T2             
+7                      EMIRATES             MT1WT2FS1S2  
+
+
+
+create table airplane_type(
+company varchar(20),
+max_seats int,
+type_name varchar(20), primary key(TYPE_NAME));
+
+insert into airplane_type values('&company', &max_seats, '&type_name');    
+
+COMPANY              MAX_SEATS              TYPE_NAME            
+-------------------- ---------------------- -------------------- 
+EMIRATES             300                    BOEING               
+QANTAS               600                    A380                 
+CATHAY PACIFIC       900                    DOUBLE DECKER
+
+
+create table airplane(
+airplane_id int primary key,
+total_no_of_seats int,
+type_name varchar(20),
+foreign key(type_name) references airplane_type(type_name));
+
+insert into airplane values(&airplane_id, &total_no_of_seats, '&type_name');
+
+
+AIRPLANE_ID            TOTAL_NO_OF_SEATS      TYPE_NAME            
+---------------------- ---------------------- -------------------- 
+1                      300                    BOEING               
+2                      600                    A380                 
+3                      900                    DOUBLE DECKER        
+
+
+
+create table fare(
+fnumber int, 
+code int, 
+amount float, 
+restrictions varchar(50),
+primary key(fnumber, code));
+
+INSERT INTO FARE VALUES( &amount, &code, &fnumber, '&restrictions');
+
+AMOUNT                 CODE                   FNUMBER                RESTRICTIONS                                       
+---------------------- ---------------------- ---------------------- -------------------------------------------------- 
+3000                   201                    1                      X                                                  
+4000                   202                    2                      Y                                                  
+2000                   203                    3                      Z                                                  
+5500                   204                    4                      A                                                  
+6800                   205                    5                      B                                                  
+10000                  206                    6                      C                                                  
+7900                   207                    7                      D   
+
+
+
+create table departure_airport( 
+airport_code int, 
+leg_no int,
+primary key(airport_code, leg_no),
+scheduled_dep_time VARCHAR(20));
+
+
+INSERT INTO departure_airport VALUES(&AIRPORT_CODE, &leg_no, '&scheduled_dep_time');
+
+
+AIRPORT_CODE           LEG_NO                 SCHEDULED_DEP_TIME   
+---------------------- ---------------------- -------------------- 
+1                      302                    11.30                
+1                      305                    15.20                
+2                      304                    12.40                
+3                      305                    13.50                
+3                      302                    16.25                
+4                      302                    16.40                
+5                      304                    8.15                 
+2                      301                    9.50                 
+4                      303                    18.30                
+5                      306                    21.45 
+
+
+create table arrival_airport( 
+airport_code int, 
+leg_no int,
+primary key(airport_code, leg_no),
+scheduled_arr_time VARCHAR(20));
+
+INSERT INTO arrival_airport VALUES(&AIRPORT_CODE, &leg_no, '&scheduled_arr_time');
+
+
+AIRPORT_CODE           LEG_NO                 SCHEDULED_ARR_TIME   
+---------------------- ---------------------- -------------------- 
+4                      302                    16.30                
+5                      305                    17.30                
+1                      304                    14.50                
+2                      305                    18.30                
+2                      302                    19.25                
+1                      302                    19.40                
+4                      304                    8.15                 
+3                      301                    9.50                 
+5                      303                    22.45                
+4                      306                    2.15   
+
+
+
+create table seat
+(seat_no int, ldate date, leg_no int, fnumber int, 
+primary key(seat_no, ldate, leg_no, fnumber));
+
+
+insert into seat values (&seat_no, '&ldate', &leg_no, &fnumber);
+
+SEAT_NO                LDATE                     LEG_NO                 FNUMBER                
+---------------------- ------------------------- ---------------------- ---------------------- 
+69                     12-JUN-10                 301                    1                      
+88                     05-AUG-06                 306                    6                      
+92                     07-SEP-11                 307                    7                      
+100                    10-JUL-07                 307                    7                      
+122                    02-MAY-13                 306                    6                      
+163                    24-APR-12                 301                    1                      
+179                    23-FEB-07                 303                    3                      
+219                    19-DEC-09                 304                    4                      
+230                    15-MAR-11                 305                    5                      
+489                    12-JAN-08                 302                    2   
+
+
+create table leg_instance
+( no_of_avail_seats int,
+ldate date,
+leg_no int,
+fnumber int,
+primary key(ldate, leg_no, fnumber));
+
+insert into leg_instance values ( &no_of_avail_seats, '&ldate', &leg_no, &fnumber);
+
+
+NO_OF_AVAIL_SEATS      LDATE                     LEG_NO                 FNUMBER                
+---------------------- ------------------------- ---------------------- ---------------------- 
+153                    12-JUN-10                 301                    1                      
+230                    15-MAR-11                 305                    5                      
+199                    19-DEC-09                 304                    4                      
+138                    12-JAN-08                 302                    2                      
+160                    23-FEB-07                 303                    3                      
+152                    24-APR-12                 301                    1                      
+77                     02-MAY-13                 306                    6                      
+31                     01-JUL-07                 307                    7                      
+124                    05-AUG-06                 306                    6                      
+156                    07-SEP-11                 307                    7    
+
+
+
+create table flight_leg(
+leg_no int, 
+fnumber int, 
+primary key(leg_no, fnumber));
+
+INSERT INTO  FLIGHT_LEG VALUES(&leg_no, &fnumber);
+
+LEG_NO                 FNUMBER                
+---------------------- ---------------------- 
+301                    1                      
+302                    2                      
+303                    3                      
+304                    4                      
+305                    5                      
+306                    6                      
+307                    7      
+
+
+CREATE TABLE RESERVATION
+( SEAT_NUMBER INT, 
+ldate DATE, 
+leg_no int, 
+FNUMBER INT, 
+CUSTOMER_NAME VARCHAR(20) not null, 
+CPHONE INT not null, 
+PRIMARY KEY(SEAT_NUMBER, ldate, leg_no, FNUMBER));
+
+INSERT INTO reservation VALUES (&seat_number, '&ldate', &leg_no, &fnumber, '&customer_name', &cphone );
+
+SEAT_NUMBER            LDATE                     LEG_NO                 FNUMBER                CUSTOMER_NAME        CPHONE                 
+---------------------- ------------------------- ---------------------- ---------------------- -------------------- ---------------------- 
+69                     12-JUN-10                 301                    1                      HEMA                 9696582311             
+143                    15-MAR-11                 305                    5                      SACHIN               8568524100             
+219                    19-DEC-09                 304                    4                      TINA                 9638534236             
+489                    12-JAN-08                 302                    2                      JAYA                 8759596300             
+179                    23-FEB-07                 303                    3                      ABHISHEK             7893683409             
+163                    12-JUN-10                 301                    1                      REKHA                8548623100             
+122                    02-MAY-13                 306                    6                      DANISH               9687637100             
+100                    10-JUL-07                 307                    7                      JOHN                 7854178520             
+88                     05-AUG-06                 306                    6                      RAHUL                785786789              
+92                     07-SEP-11                 307                    7                      MESSI                7847539992  
+
+
+i. Find the customer name reserved by maximum number of seats.
+
+SELECT CUSTOMER_NAME FROM reservation HAVING COUNT(SEAT_NUMBER) IN 
+(SELECT MAX(COUNT (SEAT_NUMBER)) FROM RESERVATION GROUP BY CUSTOMER_NAME) GROUP BY customer_name;
+
+
+CUSTOMER_NAME        
+-------------------- 
+HEMA                 
+JOHN  
+
+ii. Find the flight no of all flights that can be used on non-stop flights from HYDERABAD to JAIPUR.
+
+SELECT departure_airport.fnumber from departure_airport, arrival_airport where departure_airport.fnumber=arrival_airport.fnumber
+and departure_airport.leg_no=arrival_airport.leg_no and departure_airport.airport_code=(select airport_code from airport where city = 'HYDERABAD')
+and arrival_airport.airport_code=(select airport_code from airport where city = 'JAIPUR');
+
+FNUMBER                
+---------------------- 
+5
+2
+
+
+iii. Find the flight No which charges the lowest fare from city NEW DELHI to city VICTORIA.
+          
+SELECT MIN(amount) FROM FARE WHERE fnumber IN 
+(SELECT FNUMBER FROM ARRIVAL_airport WHERE FNUMBER IN (SELECT FNUMBER FROM departure_airport 
+WHERE airport_code=(SELECT AIRPORT_CODE FROM airport WHERE city='NEW DELHI')) AND AIRPORT_CODE=(SELECT AIRPORT_CODE FROM airport WHERE city='VICTORIA'));
+
+MIN(amount)           
+---------------------- 
+4000        
+
+iv. Find all flights running on every day from city NEW DELHI to city VICTORIA.
+
+SELECT flight.FNUMBER FROM ARRIVAL_airport, flight WHERE FNUMBER IN 
+(SELECT FNUMBER FROM departure_airport WHERE airport_code=(SELECT AIRPORT_CODE FROM airport WHERE city='NEW DELHI')) 
+AND AIRPORT_CODE=(SELECT AIRPORT_CODE FROM airport WHERE city='VICTORIA') and weekdays='MT1WT2FS1S2' AND arrival_airport.fnumber=flight.fnumber;
+
+SELECT flight.FNUMBER FROM ARRIVAL_airport, flight WHERE FNUMBER IN 
+(SELECT FNUMBER FROM departure_airport WHERE airport_code=(SELECT AIRPORT_CODE FROM airport WHERE city='NEW DELHI')) 
+AND AIRPORT_CODE=(SELECT AIRPORT_CODE FROM airport WHERE city='VICTORIA') and weekdays in all 
+('MONDAY', 'TUESDAY', 'WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY') AND arrival_airport.fnumber=flight.fnumber;
+
+
+FNUMBER                
+---------------------- 
+1                                 
+7
+
+v. Find all flights departure from City DUBAI.
+
+SELECT FNUMBER FROM departure_airport WHERE airport_code=(SELECT AIRPORT_CODE FROM airport WHERE city='DUBAI')
+
+FNUMBER                
+---------------------- 
+16                     
+2                      
+3     
+
+
+vi. Find all the flights which are having greater than 200 seats.
+
+SELECT FNUMBER FROM LEG_INSTANCE WHERE no_of_avail_seats>200;
+
+FNUMBER                
+---------------------- 
+5    
+
+
+vii. Find how many passengers are travelled from city JAIPUR on 12-jun-2010.
+
+select count(distinct) from reservation where fnumber in ( select fnumber from departure_airport where airport_code = 
+(select airport_code from airport where city='JAIPUR')) and ldate='12-jun-10';
+
+count(distinct)
+-----------------------
+2
+
+viii. Find the flight numbers which are departs between 5pm to 8 pm at city DUBAI
+
+SELECT FNUMBER FROM departure_airport WHERE scheduled_dep_time BETWEEN '17.00' AND '20.00' AND airport_code = 
+(SELECT airport_code FROM airport WHERE city = 'DUBAI');
+
+
+FNUMBER                
+---------------------- 
+3   
+
+
+ix. Find the company name designed by flight 4.
+
+
+SELECT AIRLINE FROM FLIGHT WHERE fnumber = 4;
+
+AIRLINE              
+-------------------- 
+EMIRATES      
+
+x. Find the total no.of hours travelled by the flight 4.
+
+select sum(scheduled_arr_time - scheduled_dep_time) from arrival_airport, departure_airport where departure_airport.airport_code=arrival_airport.airport_code and 
+departure_airport.leg_no=arrival_airport.leg_no;

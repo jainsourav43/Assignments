@@ -1,0 +1,6 @@
+Time point AllElectronics HighTech
+t1 6 20 Sourav Temp ó_å0  od ˆd ELABS.LOCAL USERDOMAIN=CSELABS USERNAME=c157157 USERPROFILE=C:\Users\c157157 windir=C:\Windows  Yó^Xî0    ä                                                                                               
+t2 3 10 Manas  Temp ó_å0  od ˆd ELABS.LOCAL USERDOMAIN=CSELABS USERNAME=c157157 USERPROFILE=C:\Users\c157157 windir=C:\Windows  Yó^Xî0    ä                                                                                               
+t3 4 14 Sukhdev emp ó_å0  od ˆd ELABS.LOCAL USERDOMAIN=CSELABS USERNAME=c157157 USERPROFILE=C:\Users\c157157 windir=C:\Windows  Yó^Xî0    ä                                                                                               
+t4 3 12 UNKNOWN 
+t5 2 5 Unknown

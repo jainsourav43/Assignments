@@ -1,0 +1,6 @@
+Time point AllElectronics HighTech
+t1 6 20 Sourav
+t2   10 Manas
+t3 4 14 Sukhdev
+t4 3    
+t5 2 5 

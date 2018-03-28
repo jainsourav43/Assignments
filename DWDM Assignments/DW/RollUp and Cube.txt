@@ -1,0 +1,642 @@
+DB CREATION:
+
+create table student( name varchar(20), sex varchar(7), marks number(10,2)
+);
+
+
+
+DATA INSERTION:
+
+insert into student values('Kavya','F',97);
+insert into student values('&Enter_Name','&Enter_Sex',&Enter_Marks,'&Enter_DEPT');
+insert into department values('&Name',&Enter,&enter);
+
+Querying :
+
+--------------------------------------------------------------------------
+select sex, avg(marks)
+from student 
+group by rollup (sex)  ;
+
+SEX AVG(MARKS)             
+--- ---------------------- 
+F   82                     
+M   73                     
+    77   
+--------------------------------------------------------------------------
+
+select sex, avg(marks)
+from student 
+group by cube (sex) ;
+
+
+SEX AVG(MARKS)             
+--- ---------------------- 
+    77                     
+F   82                     
+M   73                     
+--------------------------------------------------------------------------
+
+
+select sex,name, avg(marks)
+from student 
+group by cube (sex,name) ;
+
+
+SEX NAME                 AVG(MARKS)             
+--- -------------------- ---------------------- 
+                         77                     
+    Honay                97                     
+    Kavya                97                     
+    Preet                57                     
+    Vinay                67                     
+    Sakshi               77                     
+    Sourav               72                     
+    Sukhdev              72                     
+    Vaibhav              82                     
+F                        82                     
+F   Honay                97                     
+F   Kavya                97                     
+F   Preet                57                     
+F   Sakshi               77                     
+M                        73                     
+M   Vinay                67                     
+M   Sourav               72                     
+M   Sukhdev              72                     
+M   Vaibhav              82                     
+
+19 rows selected
+
+---------------------------------------------------------------------------------------------------------------------------
+
+select sex,name, avg(marks)
+from student 
+group by rollup(sex,name) ;
+
+
+SEX NAME                 AVG(MARKS)             
+--- -------------------- ---------------------- 
+F   Honay                97                     
+F   Kavya                97                     
+F   Preet                57                     
+F   Sakshi               77                     
+F                        82                     
+M   Vinay                67                     
+M   Sourav               72                     
+M   Sukhdev              72                     
+M   Vaibhav              82                     
+M                        73                     
+                         77                     
+
+11 rows selected
+
+
+
+DB ALTERED:
+alter table student add  department varchar(20);
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+QUERYING:
+------------------------------------------------
+
+
+select department,name, sex, avg(marks)
+from student 
+group by rollup (department ,name,sex) ;
+
+
+
+DEPARTMENT           NAME                 SEX AVG(MARKS)             
+-------------------- -------------------- --- ---------------------- 
+CSE                  Sourav               M   72                     
+CSE                  Sourav                   72                     
+CSE                  Sukhdev              M   72                     
+CSE                  Sukhdev                  72                     
+CSE                  Vaibhav              M   82                     
+CSE                  Vaibhav                  82                     
+CSE                                           75.33
+EEE                  Preet                F   57                     
+EEE                  Preet                    57                     
+EEE                  Sakshi               F   77                     
+EEE                  Sakshi                   77                     
+EEE                                           67                     
+MECH                 Kavya                F   97                     
+MECH                 Kavya                    97                     
+MECH                 Sukhdev              M   72                     
+MECH                 Sukhdev                  72                     
+MECH                                          84.5                   
+MATHS                Honay                F   97                     
+MATHS                Honay                    97                     
+MATHS                Vinay                M   67                     
+MATHS                Vinay                    67                     
+MATHS                                         82                     
+                                              77                     
+
+23 rows selected
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+select department,name, sex, avg(marks)
+from student 
+group by cube (department ,name,sex) ;
+
+
+
+
+
+
+DEPARTMENT           NAME                 SEX AVG(MARKS)             
+-------------------- -------------------- --- ---------------------- 
+                                              77                     
+                                          F   82                     
+                                          M   73                     
+                     Honay                    97                     
+                     Honay                F   97                     
+                     Kavya                    97                     
+                     Kavya                F   97                     
+                     Preet                    57                     
+                     Preet                F   57                     
+                     Vinay                    67                     
+                     Vinay                M   67                     
+                     Sakshi                   77                     
+                     Sakshi               F   77                     
+                     Sourav                   72                     
+                     Sourav               M   72                     
+                     Sukhdev                  72                     
+                     Sukhdev              M   72                     
+                     Vaibhav                  82                     
+                     Vaibhav              M   82                     
+CSE                                           75.33333333333333333333333333333333333333 
+CSE                                       M   75.33333333333333333333333333333333333333 
+CSE                  Sourav                   72                     
+CSE                  Sourav               M   72                     
+CSE                  Sukhdev                  72                     
+CSE                  Sukhdev              M   72                     
+CSE                  Vaibhav                  82                     
+CSE                  Vaibhav              M   82                     
+EEE                                           67                     
+EEE                                       F   67                     
+EEE                  Preet                    57                     
+EEE                  Preet                F   57                     
+EEE                  Sakshi                   77                     
+EEE                  Sakshi               F   77                     
+MECH                                          84.5                   
+MECH                                      F   97                     
+MECH                                      M   72                     
+MECH                 Kavya                    97                     
+MECH                 Kavya                F   97                     
+MECH                 Sukhdev                  72                     
+MECH                 Sukhdev              M   72                     
+MATHS                                         82                     
+MATHS                                     F   97                     
+MATHS                                     M   67                     
+MATHS                Honay                    97                     
+MATHS                Honay                F   97                     
+MATHS                Vinay                    67                     
+MATHS                Vinay                M   67                     
+
+47 rows selected
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+select department,name, sex, avg(marks)
+from student
+group by grouping sets ((department ,name),(department ,sex))  ;
+
+
+
+DEPARTMENT           NAME                 SEX AVG(MARKS)             
+-------------------- -------------------- --- ---------------------- 
+CSE                  Sourav                   72                     
+CSE                  Sukhdev                  72                     
+MECH                 Kavya                    97                     
+CSE                  Vaibhav                  82                     
+EEE                  Sakshi                   77                     
+MECH                 Sukhdev                  72                     
+MATHS                Honay                    97                     
+MATHS                Vinay                    67                     
+EEE                  Preet                    57                     
+MATHS                                     M   67                     
+EEE                                       F   67                     
+MECH                                      F   97                     
+MECH                                      M   72                     
+CSE                                       M   75.33333333333333333333333333333333333333 
+MATHS                                     F   97                     
+
+15 rows selected
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+select department,name, sex, avg(marks)
+from student
+group by grouping sets ((department ,name),(department ,sex))  ;
+
+
+
+
+
+
+DEPARTMENT           NAME                 SEX AVG(MARKS)             
+-------------------- -------------------- --- ---------------------- 
+CSE                  Sourav                   72                     
+CSE                  Sukhdev                  72                     
+MECH                 Kavya                    97                     
+CSE                  Vaibhav                  82                     
+EEE                  Sakshi                   77                     
+MECH                 Sukhdev                  72                     
+MATHS                Honay                    97                     
+MATHS                Vinay                    67                     
+EEE                  Preet                    57                     
+MATHS                                     M   67                     
+EEE                                       F   67                     
+MECH                                      F   97                     
+MECH                                      M   72                     
+CSE                                       F   82                     
+CSE                                       M   72                     
+MATHS                                     F   97                     
+
+16 rows selected
+---------------------------------------------------------------------------------------------------------------------------
+
+
+GROUPING SETS
+
+select department,name, sex, avg(marks)
+from student
+group by grouping sets ((sex ,name),(department ,sex))  ;
+
+
+
+
+DEPARTMENT           NAME                 SEX AVG(MARKS)             
+-------------------- -------------------- --- ---------------------- 
+                     Sourav               M   72                     
+                     Vaibhav              F   82                     
+                     Preet                F   57                     
+                     Honay                F   97                     
+                     Kavya                F   97                     
+                     Vinay                M   67                     
+                     Sakshi               F   77                     
+                     Sukhdev              M   74                     
+MECH                                      M   72                     
+MECH                                      F   97                     
+CSE                                       F   82                     
+MATHS                                     F   97                     
+CSE                                       M   74                     
+MATHS                                     M   67                     
+EEE                                       F   67                     
+
+15 rows selected
+-------------------------------------------------------------------------------------------------------------------------------------------
+PARTIAL ROLLUP
+
+
+
+select department,sex,name, avg(marks)
+from student 
+group by department, rollup(sex,name) ;
+
+
+
+
+
+
+
+
+DEPARTMENT           SEX NAME                 AVG(MARKS)             
+-------------------- --- -------------------- ---------------------- 
+CSE                  F   Vaibhav              82                     
+CSE                  F                        82                     
+CSE                  M   Vikas                99                     
+CSE                  M   Sourav               72                     
+CSE                  M   Sukhdev              76                     
+CSE                  M                        82.33333333333333333333333333333333333333 
+CSE                                           82.25                  
+EEE                  F   Preet                57                     
+EEE                  F   Sakshi               77                     
+EEE                  F                        67                     
+EEE                                           67                     
+MECH                 F   Yash                 98                     
+MECH                 F   Kavya                97                     
+MECH                 F                        97.5                   
+MECH                 M   Sukhdev              72                     
+MECH                 M                        72                     
+MECH                                          89                     
+MATHS                F   Honay                97                     
+MATHS                F                        97                     
+MATHS                M   Vinay                67                     
+MATHS                M                        67                     
+MATHS                                         82                     
+
+22 rows selected
+
+--------------------------------------------------------------------------------------------------------------
+PARTIAL CUBE
+select department,sex,name, avg(marks)
+from student 
+WHERE sex='M'
+group by   department , cube(sex,name) ;
+
+
+
+DEPARTMENT           SEX NAME                 AVG(MARKS)             
+-------------------- --- -------------------- ---------------------- 
+CSE                                           82.33333333333333333333333333333333333333 
+CSE                      Vikas                99                     
+CSE                      Sourav               72                     
+CSE                      Sukhdev              76                     
+CSE                  M                        82.33333333333333333333333333333333333333 
+CSE                  M   Vikas                99                     
+CSE                  M   Sourav               72                     
+CSE                  M   Sukhdev              76                     
+MECH                                          72                     
+MECH                     Sukhdev              72                     
+MECH                 M                        72                     
+MECH                 M   Sukhdev              72                     
+MATHS                                         67                     
+MATHS                    Vinay                67                     
+MATHS                M                        67                     
+MATHS                M   Vinay                67                     
+
+16 rows selected
+------------------------------------------------------------------------------------------------------------------------
+
+
+select department,sex,name, avg(marks)
+from student 
+group by  rollup(department,sex,name) ;
+
+
+
+
+
+DEPARTMENT           SEX NAME                 AVG(MARKS)             
+-------------------- --- -------------------- ---------------------- 
+CSE                  F   Vaibhav              82                     
+CSE                  F                        82                     
+CSE                  M   Vikas                99                     
+CSE                  M   Sourav               72                     
+CSE                  M   Sukhdev              76                     
+CSE                  M                        82.33333333333333333333333333333333333333 
+CSE                                           82.25                  
+EEE                  F   Preet                57                     
+EEE                  F   Sakshi               77                     
+EEE                  F                        67                     
+EEE                                           67                     
+MECH                 F   Yash                 98                     
+MECH                 F   Kavya                97                     
+MECH                 F                        97.5                   
+MECH                 M   Sukhdev              72                     
+MECH                 M                        72                     
+MECH                                          89                     
+MATHS                F   Honay                97                     
+MATHS                F                        97                     
+MATHS                M   Vinay                67                     
+MATHS                M                        67                     
+MATHS                                         82                     
+                                              81.27272727272727272727272727272727272727 
+
+23 rows selected
+
+
+select department,sex,name, avg(marks)
+from student 
+group by  rollup(department,sex,name,marks) ;*********// Getting 11 rows Extra correspond to dept sex name because 
+//in this we are repeating the row because the average in case of a student is same as the average****************
+
+
+
+
+
+
+DEPARTMENT           SEX NAME                 AVG(MARKS)             
+-------------------- --- -------------------- ---------------------- 
+CSE                  F   Vaibhav              82                     
+CSE                  F   Vaibhav              82                     
+CSE                  F                        82                     
+CSE                  M   Vikas                99                     
+CSE                  M   Vikas                99                     
+CSE                  M   Sourav               72                     
+CSE                  M   Sourav               72                     
+CSE                  M   Sukhdev              76                     
+CSE                  M   Sukhdev              76                     
+CSE                  M                        82.33333333333333333333333333333333333333 
+CSE                                           82.25                  
+EEE                  F   Preet                57                     
+EEE                  F   Preet                57                     
+EEE                  F   Sakshi               77                     
+EEE                  F   Sakshi               77                     
+EEE                  F                        67                     
+EEE                                           67                     
+MECH                 F   Yash                 98                     
+MECH                 F   Yash                 98                     
+MECH                 F   Kavya                97                     
+MECH                 F   Kavya                97                     
+MECH                 F                        97.5                   
+MECH                 M   Sukhdev              72                     
+MECH                 M   Sukhdev              72                     
+MECH                 M                        72                     
+MECH                                          89                     
+MATHS                F   Honay                97                     
+MATHS                F   Honay                97                     
+MATHS                F                        97                     
+MATHS                M   Vinay                67                     
+MATHS                M   Vinay                67                     
+MATHS                M                        67                     
+MATHS                                         82                     
+                                              81.27272727272727272727272727272727272727 
+
+34 rows selected
+
+
+
+----------------------------------------------------------------------------------------------------------------
+
+
+
+
+select department,sex,marks,name
+from student 
+group by  rollup(department,sex,marks,name) ;
+
+
+
+DEPARTMENT           SEX MARKS                  NAME                 
+-------------------- --- ---------------------- -------------------- 
+CSE                  F   82                     Vaibhav              
+CSE                  F   82                                          
+CSE                  F                                               
+CSE                  M   72                     Sourav               
+CSE                  M   72                                          
+CSE                  M   76                     Sukhdev              
+CSE                  M   76                                          
+CSE                  M   99                     Vikas                
+CSE                  M   99                                          
+CSE                  M                                               
+CSE                                                                  
+EEE                  F   57                     Preet                
+EEE                  F   57                                          
+EEE                  F   77                     Sakshi               
+EEE                  F   77                                          
+EEE                  F                                               
+EEE                                                                  
+MECH                 F   97                     Kavya                
+MECH                 F   97                                          
+MECH                 F   98                     Yash                 
+MECH                 F   98                                          
+MECH                 F                                               
+MECH                 M   72                     Sukhdev              
+MECH                 M   72                                          
+MECH                 M                                               
+MECH                                                                 
+MATHS                F   97                     Honay                
+MATHS                F   97                                          
+MATHS                F                                               
+MATHS                M   67                     Vinay                
+MATHS                M   67                                          
+MATHS                M                                               
+MATHS                                                                
+                                                                     
+
+34 rows selected
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+select department,sex,name, avg(marks)
+from student 
+WHERE sex='M'
+group by  rollup(department,sex,name) ;
+
+
+
+
+
+DEPARTMENT           SEX NAME                 AVG(MARKS)             
+-------------------- --- -------------------- ---------------------- 
+CSE                  M   Vikas                99                     
+CSE                  M   Sourav               72                     
+CSE                  M   Sukhdev              76                     
+CSE                  M                        82.33333333333333333333333333333333333333 
+CSE                                           82.33333333333333333333333333333333333333 
+MECH                 M   Sukhdev              72                     
+MECH                 M                        72                     
+MECH                                          72                     
+MATHS                M   Vinay                67                     
+MATHS                M                        67                     
+MATHS                                         67                     
+                                              77.2                   
+
+12 rows selected
+
+----------------------------------------------------------------------------------------------------------------------------
+
+
+New DATABASE CREATION:
+
+
+create table employee(
+name varchar(20),
+rank varchar(10),
+salary number(10),
+division_name varchar(10)
+);
+
+create table organisation (
+division_name varchar(20),
+division_id number(20),
+no_of_employee number(20)
+
+
+**************************************************************************************************************
+				Grouping ID
+******************************************************************************************************************
+
+
+
+
+
+
+select department, grouping_id (sex),name, avg(marks)
+from student 
+WHERE sex='M'
+group by   department , cube(sex,name) ;
+
+
+DEPARTMENT           GROUPING_ID(SEX)       NAME                 AVG(MARKS)             
+-------------------- ---------------------- -------------------- ---------------------- 
+CSE                  1                                           82.33333333333333333333333333333333333333 
+CSE                  1                      Vikas                99                     
+CSE                  1                      Sourav               72                     
+CSE                  1                      Sukhdev              76                     
+CSE                  0                                           82.33333333333333333333333333333333333333 
+CSE                  0                      Vikas                99                     
+CSE                  0                      Sourav               72                     
+CSE                  0                      Sukhdev              76                     
+MECH                 1                                           72                     
+MECH                 1                      Sukhdev              72                     
+MECH                 0                                           72                     
+MECH                 0                      Sukhdev              72                     
+MATHS                1                                           67                     
+MATHS                1                      Vinay                67                     
+MATHS                0                                           67                     
+MATHS                0                      Vinay                67                     
+
+16 rows selected
+
+
+
+
+
+**************************************************************************************************************
+					GROUP_ID()
+*******************************************************************************************************************
+select department, grouping_id (sex) ,group_id(),name, avg(marks)
+from student 
+WHERE sex='M'
+group by   department , cube(sex,name) ;
+
+
+
+
+DEPARTMENT           GROUPING_ID(SEX)       GROUP_ID()             NAME                 AVG(MARKS)             
+-------------------- ---------------------- ---------------------- -------------------- ---------------------- 
+CSE                  1                      0                                           82.33333333333333333333333333333333333333 
+CSE                  1                      0                      Vikas                99                     
+CSE                  1                      0                      Sourav               72                     
+CSE                  1                      0                      Sukhdev              76                     
+CSE                  0                      0                                           82.33333333333333333333333333333333333333 
+CSE                  0                      0                      Vikas                99                     
+CSE                  0                      0                      Sourav               72                     
+CSE                  0                      0                      Sukhdev              76                     
+MECH                 1                      0                                           72                     
+MECH                 1                      0                      Sukhdev              72                     
+MECH                 0                      0                                           72                     
+MECH                 0                      0                      Sukhdev              72                     
+MATHS                1                      0                                           67                     
+MATHS                1                      0                      Vinay                67                     
+MATHS                0                      0                                           67                     
+MATHS                0                      0                      Vinay                67                     
+
+16 rows selected
+
+
+**************************************************************************************************************
+					GROUP_ID()
+*******************************************************************************************************************
+
+
+
+
+
+

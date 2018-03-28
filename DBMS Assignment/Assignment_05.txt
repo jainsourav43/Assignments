@@ -1,0 +1,512 @@
+1. Create a package specification and the body for a package named School_api(). The package contains the procedure Get_name_addressi() and the function Instructor_status().
+Get_name_addressi(): The procedure should accept two parameters to hold a table name and an ID and should return six parameters with first name, last name, street, city, state, and zip code information
+Instroctor_status(): For a given instructor, determine how many sections he or she is teaching. If the number is greater than or equal to 3, return a message saying that the instructor needs a vacation. Otherwise, return a message saying how many sections this instructor is teaching.
+
+
+
+
+
+create or replace
+package school_api as
+
+type perrecType is record (inid number(10),firstname varchar(20),
+
+lastname varchar(20),street varchar(20),city varchar(20),state varchar(20),zip number(10));
+
+--cursor get_detailsStudent return perrecType ;
+--
+--cursor get_detailsInstructor return perrecType ;
+--
+procedure get_addressi(
+tablename in varchar2,
+id in number,
+firstname out varchar2,
+lastname out varchar2,
+street out varchar2,
+city out varchar2,
+state out varchar2,
+zip out number
+);
+function Instroctor_status (id number)  return varchar2;
+procedure remove_student (id number ) ;
+END school_api;
+
+
+;---------------------------------------------------------------------------------------------------------------
+create or replace
+package body school_api as 
+--
+--cursor get_deatilsStudent return perrectype is
+--select  stid, firstname, lastname, street, city, state, zip from student;
+--cursor get_deatilsInstructor return perrectype is
+--select  stid, firstname, lastname, street, city, state, zip from Instructor
+function instroctor_status(id  number ) return varchar2 is
+init_id number;
+count_id number;
+begin 
+select inid,sec
+into init_id, count_id 
+from inst_sec
+where id=inid;
+if count_id >=3 then
+return 'Vacation';
+else
+return 'No vacation';
+end if;
+end instroctor_status;
+
+procedure get_addressi(
+tablename varchar2,
+id number,
+firstname out varchar2,
+lastname out varchar2,
+street out varchar2,
+city out varchar2,
+state out varchar2,
+zip out number
+) is 
+begin 
+if(tablename ='student') then
+select s.firstname ,s.lastname,s.street,s.city,s.state,s.zip into 
+firstname ,lastname,street,city,state,zip from
+student s
+where id =s.stid;
+elsif(tablename='Istructor') then
+select s.firstname ,s.lastname,s.street,s.city,s.state,s.zip into 
+firstname ,lastname,street,city,state,zip from
+Instructor s
+where id =s.inid;
+end if;
+end get_addressi;
+end school_api;
+;---------------------------------------------------------------------------------------------------------------
+create or replace package school_api as
+
+type perrecType is record (inid number(10),firstname varchar(20),
+
+lastname varchar(20),street varchar(20),city varchar(20),state varchar(20),zip number(10));
+
+--cursor get_detailsStudent return perrecType ;
+--
+--cursor get_detailsInstructor return perrecType ;
+--
+procedure get_addressi(
+tablename in varchar2,
+id in number,
+firstname out varchar2,
+lastname out varchar2,
+street out varchar2,
+city out varchar2,
+state out varchar2,
+zip out number
+);
+function Instroctor_status (id number)  return varchar2;
+END school_api;
+
+;---------------------------------------------------------------------------------------------------------------
+ set serveroutput on
+ 
+ declare
+ tname varchar2(20);
+s_id number(10);
+tfname varchar2(20);
+tlname varchar2(20);
+tstreet varchar2(20);
+tcity varchar2(20);
+tstate VARCHAR2(20);
+tzip number(10);
+begin
+tname :='&entertable';
+s_id:=&enterid;
+school_api.get_addressi(tname,s_id,tfname,tlname,tstreet,tcity,tstate,tzip);
+dbms_output.put_line(tfname || '  '|| tlname|| ' '|| tstreet || ' '|| tcity || ' '|| tstate || ' ');
+tfname:= school_api.instroctor_status(3);
+dbms_output.put_line(tfname);
+end;
+
+ 
+ ;---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+anonymous block completed
+kdsjfnbk  nflkjh fho no fods 
+Vacation
+;------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+2. Add a procedure to the school_api package called remove_student. This procedure accepts a student_id and returns nothing. Based on the student ID passed in, it removes the student from the database. If the student does not exist or if a problem occurs while removing the student (such as a foreign key constraint violation), let the calling program handle it.
+
+
+
+
+;----------------------------------------------------------------------------------------------------------------
+create or replace
+package body school_api as 
+--
+--cursor get_deatilsStudent return perrectype is
+--select  stid, firstname, lastname, street, city, state, zip from student;
+--cursor get_deatilsInstructor return perrectype is
+--select  stid, firstname, lastname, street, city, state, zip from Instructor
+function instroctor_status(id  number ) return varchar2 is
+init_id number;
+count_id number;
+begin 
+select inid,sec
+into init_id, count_id 
+from inst_sec
+where id=inid;
+if count_id >=3 then
+return 'Vacation';
+else
+return 'No vacation';
+end if;
+end instroctor_status;
+
+procedure get_addressi(
+tablename varchar2,
+id number,
+firstname out varchar2,
+lastname out varchar2,
+street out varchar2,
+city out varchar2,
+state out varchar2,
+zip out number
+) is 
+begin 
+if(tablename ='student') then
+select s.firstname ,s.lastname,s.street,s.city,s.state,s.zip into 
+firstname ,lastname,street,city,state,zip from
+student s
+where id =s.stid;
+elsif(tablename='Istructor') then
+select s.firstname ,s.lastname,s.street,s.city,s.state,s.zip into 
+firstname ,lastname,street,city,state,zip from
+Instructor s
+where id =s.inid;
+end if;
+end get_addressi;
+
+
+procedure remove_student (id number) is
+begin
+delete from student
+where id =student.stid;
+end remove_student;
+end school_api;
+
+
+
+
+
+
+
+;----------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create or replace
+package school_api as
+
+type perrecType is record (inid number(10),firstname varchar(20),
+
+lastname varchar(20),street varchar(20),city varchar(20),state varchar(20),zip number(10));
+
+--cursor get_detailsStudent return perrecType ;
+--
+--cursor get_detailsInstructor return perrecType ;
+--
+procedure get_addressi(
+tablename in varchar2,
+id in number,
+firstname out varchar2,
+lastname out varchar2,
+street out varchar2,
+city out varchar2,
+state out varchar2,
+zip out number
+);
+function Instroctor_status (id number)  return varchar2;
+procedure remove_student (id number ) ;
+END school_api;
+
+
+
+;----------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+ set serveroutput on
+ 
+ declare
+ tname varchar2(20);
+s_id number(10);
+tfname varchar2(20);
+tlname varchar2(20);
+tstreet varchar2(20);
+tcity varchar2(20);
+tstate VARCHAR2(20);
+tzip number(10);
+x number;+
+begin
+tname :='&entertable';
+s_id:=&enterid;
+school_api.get_addressi(tname,s_id,tfname,tlname,tstreet,tcity,tstate,tzip);
+dbms_output.put_line(tfname || '  '|| tlname|| ' '|| tstreet || ' '|| tcity || ' '|| tstate || ' ');
+tfname:= school_api.instroctor_status(3);
+dbms_output.put_line(tfname);
+x:=&enterid;
+school_api.remove_student(x);
+end;
+;--------------------------------------------------------------------------------------------------------------------------
+
+anonymous block completed
+kdsjfnbk  nflkjh fho no fods 
+Vacation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3. Alter remove_student in the school_api package body to accept an additional parameter. 
+This new parameter should be a VARCHAR2 and should be called p_ri. Make p_ri default to R. 
+The new parameter may contain a value of R or C. If R is received, it represents DELETE RESTRICT,
+ and the procedure acts as it does now. If there are enrollments for the student, the delete is disallowed. 
+If a C is received, it represents DELETE CASCADE. This functionally means that the remove_student procedure 
+locates all records for the student in all the Student Database tables. It removes them from the database before
+ attempting to remove the student from the student table. 
+Decide how to handle the situation when the user passes in a code other than C or R.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create or replace package body school_api as 
+--
+--cursor get_deatilsStudent return sturectype is
+--select  stid, courseid from enrollment;
+--cursor get_deatilsInstructor return perrectype is
+--select  stid, firstname, lastname, street, city, state, zip from Instructor
+function instroctor_status(id  number ) return varchar2 is
+init_id number;
+count_id number;
+begin 
+select inid,sec
+into init_id, count_id 
+from inst_sec
+where id=inid;
+if count_id >=3 then
+return 'Vacation';
+else
+return 'No vacation';
+end if;
+end instroctor_status;
+
+procedure get_addressi(
+tablename varchar2,
+id number,
+firstname out varchar2,
+lastname out varchar2,
+street out varchar2,
+city out varchar2,
+state out varchar2,
+zip out number
+) is 
+begin 
+if(tablename ='student') then
+select s.firstname ,s.lastname,s.street,s.city,s.state,s.zip into 
+firstname ,lastname,street,city,state,zip from
+student s
+where id =s.stid;
+elsif(tablename='Istructor') then
+select s.firstname ,s.lastname,s.street,s.city,s.state,s.zip into 
+firstname ,lastname,street,city,state,zip from
+Instructor s
+where id =s.inid;
+end if;
+end get_addressi;
+
+
+procedure remove_student (id number,p_ri varchar2:='R') is
+begin
+if p_ri='R' then 
+delete from student
+where id =student.stid;
+else
+delete from student
+where id =student.stid;
+delete FROM enrollment
+where enrollment.stid=id;
+end if;
+end remove_student;
+end school_api;
+
+
+
+declare 
+ide number(10);
+begin
+ide:=&enter;
+school_api.remove_student(ide,'C');
+end;
+
+
+
+
+TRANSACTION PROCESSING
+5. Go through the lab manual PLSQL_Transactions_Manual.pdf (Only the highlighted chapter- Processing Transactions: pages from 5-40 to 5-50) then practice examples given in the manual.
+--update 
+
+set serveroutput on
+declare
+id number(10);
+course number(10);
+begin
+id:=&enterid;
+course:=&entercourse;
+update enrollment
+set courseid=course
+where stid=id;
+commit work;
+end;
+
+
+
+-- insert command 
+set serveroutput on
+declare
+id number(10);
+course number(10);
+begin
+id:=&enterid;
+course:=&entercourse;
+insert into  enrollment
+values(id,course);
+commit work;
+end;
+
+
+
+
+
+
+--
+
+commit work;
+set serveroutput on
+declare
+id number(10);
+course number(10);
+begin
+id:=&enterid;
+course:=&entercourse;
+insert into  enrollment values(id,course);
+
+select stid into id from student where student.stid=11 ;
+exception
+when TOO_MANY_ROWS then 
+rollback work;
+commit work;
+end;
+
+
+
+
+
+
+
+
+
+anonymous block completed
+
+
+
+
+
+
+
+
+commit work;
+set serveroutput on
+declare
+id number(10);
+course number(10);
+begin
+id:=&enterid;
+course:=&entercourse;
+
+insert into  enrollment values(id,course);
+SAVEPOINT DO_INSERT;
+select stid into id from student where student.stid=11 ;
+exception
+when TOO_MANY_ROWS then 
+rollback TO DO_INSERT;
+commit work;
+end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

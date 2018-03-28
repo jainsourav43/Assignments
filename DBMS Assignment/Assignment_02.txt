@@ -1,0 +1,113 @@
+create table publisher
+ ( PublisherName varchar (20), City varchar(20), Country varchar (20), 
+TelephoneNumber number(10), YaerOfFoundation  number (10));
+
+
+
+ create table  Author (AuthorNumber number(10), AuthorName varchar(20), DateOfBirth  date);
+
+
+
+Q.1Find the book number, book name, and number of pages of all the books published by London Publishing Ltd.
+ List the results in order by book name.
+
+
+
+
+select booknumber,bookname,pages
+from book
+where publishername='London Publishing Ltd.'
+order by bookname;
+
+
+
+BOOKNUMBER             BOOKNAME             PAGES                  
+---------------------- -------------------- ---------------------- 
+6492                   Neverwhere           690                    
+6813                   The Luminaries       1000                   
+
+
+
+2. How many books of at least 400 pages does Good Reading Bookstores carry that were published by publishers based in Paris, France?
+
+
+
+
+
+
+select count  (booknumber)
+from book,publisher
+where publisher.publishername=book.publishername and book.pages>400 and publisher.city='Paris';
+
+
+
+COUNT(BOOKNUMBER)      
+---------------------- 
+2                      
+
+
+3. List the publishers in Belgium, Brazil, and Singapore that publish books written by authors who were born before 1920.
+
+
+SELECT book.publishername
+from writing, author,publisher,book
+where author.dateofbirth<'01-jan-1920'and writing.authornumber=author.authornumber  and book.booknumber=writing.booknumber and (publisher.country='Belgium'  or publisher.country='Brazil' or publisher.country='Singapore')
+and publisher.publishername=book.publishername; 
+
+
+
+
+PUBLISHERNAME                                      
+-------------------------------------------------- 
+Brazil Publishing Ltd.  
+
+
+
+4. How many books did each publisher in India, Norway; Nairobi, Kenya; and Auckland, New Zealand, publish in 2001?
+
+
+
+
+
+
+select count(booknumber)
+from publisher, book
+where book.publishedyear=2001 and publisher.publishername=book.publishername  and
+(publisher.country='Norway' or publisher.country='Nariobi' or publisher.country='Kenya' or publisher.country='New Zealand' or publisher.country='Auckland');
+
+
+
+
+
+COUNT(BOOKNUMBER)      
+---------------------- 
+4                      
+
+
+
+
+
+
+5. Which publisher published the book that has the earliest publication year among all the books that Good Reading Bookstores carries?
+
+select publishername
+from 
+(
+select  min(publishedyear) as t
+from book),book
+ where t=book.publishedyear;
+
+
+
+
+
+
+
+PUBLISHERNAME                                      
+-------------------------------------------------- 
+Brazil Publishing Ltd.                             
+Singapore                                          
+London Publishing Ltd.                             
+
+
+

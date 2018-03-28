@@ -1,0 +1,399 @@
+1. Write a PL/SQL program to input two numbers and display the total and average of these numbers.
+
+
+
+set serveroutput on
+declare nu1 number(5);
+nu2 NUMBER(5);
+begin
+ nu1 := (&numberinput);
+ nu2 := (&numberinput);
+dbms_output.put_line('The Total of two numbers is = '||(nu1+ nu2));
+dbms_output.put_line('The Average  of two numbers is = '||(nu1+ nu2)/2);
+end;
+
+
+
+anonymous block completed
+The Total of two numbers is = 127
+The Average  of two numbers is = 63.5
+
+
+
+
+
+2. Write a PL/SQL block to accept a year and check whether it is a leap year or not?
+
+
+
+
+
+
+set serveroutput on
+declare nu1 number(5);
+BEGIN 
+nu1:=(&IUNPUTTHEYEAR);
+if ((nu1 mod 4=0 and nu1 mod 100 <>0 ) or nu1 mod 400 =0)
+then
+dbms_output.put_line(nu1||' is a leap year ');
+else
+dbms_output.put_line(nu1||' is  not a leap year ');
+
+end if; 
+end;
+
+
+
+
+anonymous block completed
+1700 is  not a leap year 
+
+
+
+
+
+3. Write a program to input the salary and working experience of employee and calculate the bonus as 10% of salary.
+ Give $500. Extra bonus to those who’s working experience More than 10 years.
+
+
+
+
+
+set serveroutput on
+declare Salary float(5);
+Work_exp number(5);
+begin 
+Salary:=&salary;
+Work_exp:=&Exoerience;
+if(Work_exp>10)then
+dbms_output.put_line('The Total Bonus   for Seniors is '|| ((Salary /10)+500));
+else
+dbms_output.put_line('The  Bonus  for Work_exp less than 10  is '|| (Salary/10));
+end if;
+end;
+
+
+
+anonymous block completed
+The Total Bonus   for Seniors is 1000
+
+
+
+
+
+4. Write a PL/SQL program to input the Basic Salary and calculate the HRA, DA and Net Salary as per:
+BASIC HRA DA
+>15000 12% 8%
+>12000 10% 6%
+>9000 7% 4%
+OTHERS 5% $200
+
+
+
+Declare da float(5);
+input float(5);
+hra float(5);
+begin 
+input:= &inputSalary;
+if(input>15000) THEN
+dbms_output.put_line('The HRA is '||((input*12)/100)|| '  The DA is '||((input*8)/100) );
+elsif (input > 12000 )then
+dbms_output.put_line('The HRA is '||((input*10)/100)|| '  The DA is '||((input*6)/100) );
+elsif (input > 9000 )then
+dbms_output.put_line('The HRA is '||((input*7)/100)|| ' And  The DA is '||((input*4)/100) );
+end if;
+end;
+
+
+
+anonymous block completed
+The HRA is 1920  The DA is 1280
+
+
+
+
+
+5. Program to input principal amount, time. If time more than 10 years, calculate the simple interest with 8% interest otherwise with 6%.
+
+
+
+
+declare timeof number(5);
+principal NUMBER(5);
+begin 
+timeof := &timeof;
+principal := &principal;
+if(timeof>10)then
+dbms_output.put_line('The INTEREST IS '||(principal*8*timeof)/100);
+else
+dbms_output.put_line('The INTEREST IS '||(principal*6*timeof)/100);
+end if ;
+end;
+
+
+
+
+anonymous block completed
+The INTEREST  IS 4800
+
+
+
+
+
+
+SELECT, INSERT AND DELETE:
+6. Write the Code to input the employee’s number and print the name and salary of that employee.
+
+
+
+
+
+
+declare empn number(10);
+input NUMBER(10);
+Salary NUMBER(5);
+Nameof Varchar (20);
+begin
+input :=&enternumber;
+select empnumber, empsalary, empname into empn,Salary ,Nameof from employeedata
+where empnumber =input;
+dbms_output.put_line(empn || '  '|| salary || '  '|| '  '||Nameof);
+end;
+
+
+
+
+anonymous block completed
+25  5000    SOURAV
+
+
+
+Sourav	1	50000	15
+Suhdev	3	30000	56
+Pradeep	5	3000	5
+Vinay	8	2000	41
+Raman	89	6123	47
+Raghav	9	98563	85
+John	11	2589	6
+Charlie	58	96325	57
+
+
+
+
+
+7. Write a PL/SQL block to print the highest paid and lowest paid employee from employee table.
+
+
+
+
+set serveroutput on
+declare maxi number(10);
+mini number(10);
+Salary NUMBER(5);
+Nameof Varchar (20);
+empn number(10);
+begin
+select max(empsalary) as maxim ,min(empsalary) as minim
+into maxi,mini 
+from employeedata;
+select empno, empsalary into empn,Salary  from employeedata
+where employeedata.empSalary=maxi ;
+dbms_output.put_line( 'Employee number is of maximum is    '||empn||'  salary is ' ||salary );
+select empno, empsalary into empn,Salary  from employeedata
+where employeedata.empSalary=mini ;
+dbms_output.put_line( 'Employee number is of minimum is    '||empn||'  salary is ' ||salary );
+end;
+
+
+
+
+
+
+anonymous block completed
+Employee number is of maximum is    9  salary is 98563
+Employee number is of minimum is    8  salary is 2000
+
+
+
+8. Write the PL/SQL code to input the employee’s number and increase the salary by 10% if his salary < 5000 otherwise delete the record.
+
+
+
+
+
+
+
+set serveroutput on;
+declare empn number(10);
+deno number(10);
+input NUMBER(10);
+Salary NUMBER(5);
+Nameof Varchar (20);
+begin
+input :=&enternumber;
+select empsalary, empname, deptno into Salary ,Nameof,deno from employeedata
+where employeedata.empno =input;
+if(Salary<5000)then
+salary :=salary*1.1;
+delete from employeedata where employeedata.empno=input;
+insert into employeedata values(nameof,input,salary,deno);
+else
+delete from employeedata where employeedata.empno=input;
+end if ;
+dbms_output.put_line(empn || '  '|| salary || '  '|| '  '||Nameof);
+end;
+
+
+
+
+
+anonymous block completed
+  30000    Suhdev
+
+
+
+
+
+
+9. Write a PL/SQL block to delete all the rows of a particular department from the table employee where deptno is accepted from the user.
+
+
+
+
+set serveroutput on;
+declare empn number(10);
+cou number(10);
+i INTEGER:=0;
+deno number(10);
+input NUMBER(10);
+Salary NUMBER(5);
+Nameof Varchar (20);
+begin
+input :=&enternumber;
+select count(empno)
+into cou 
+from employeedata
+where employeedata.deptno=input;
+Loop
+delete from employeedata where employeedata.deptno=input;
+i:=i+1;
+exit when i>cou;
+end LOOP ;
+end;
+
+
+
+
+
+anonymous block completed
+
+
+
+
+
+10. Write PL/SQL code to insert the record in department table.
+
+
+
+
+
+set serveroutput on;
+declare deno number(10);
+Nameof Varchar (20);
+begin
+deno := &EnterNumber;
+Nameof:= &NameofDept;
+insert into department values(deno,nameof);
+end;
+
+
+
+ 	
+anonymous block completed
+
+
+ 
+
+
+
+11. Write PL/SQL script to input salary amount and display the Employee Name earning same salary amount.
+ Use NO_DATA_FOUND and TOO_MANY ROWS Exception
+
+
+
+
+set serveroutput on;
+declare deno number(10);empn number(10);
+Salary number(10);
+Nameof Varchar (20);
+begin
+Salary := &EnterSalary;
+select empno into empn from employeedata
+where employeedata.empsalary=salary;
+EXCEPTION
+WHEN NO_DATA_FOUND THEN
+dbms_output.put_line('No Data Found in the database ');
+WHEN TOO_MANY_ROWS THEN
+dbms_output.put_line('Too Many Rows Exception of same salary in database ');
+for i in (select empno, empname from employeedata where employeedata.empsalary=salary )loop
+dbms_output.put_line('the Emp number are '|| i.empno|| '  and the Emp name is '|| i.empname);
+end loop;
+end;
+
+
+
+
+
+anonymous block completed
+No Data Found in the database 
+
+anonymous block completed
+Too Many Rows Exception of same salary in database 
+
+
+
+
+12. Write PL/SQL script that traps ZERO_DIVIDE exception when a number is divided by other number.
+ And also raised user define exception if number2 greater than number1.
+
+
+
+
+
+declare  
+input number(10);
+divisor number(10);
+output number(10);
+my_FirstException EXCEPTION;
+
+begin 
+input :=&EnterDividend;
+divisor:=&EnterDivisor;
+output:=input/divisor;
+dbms_output.put_line('The Quotient is '|| output);
+if(divisor >input ) THEN
+RAISE my_FirstException;
+end if ;
+EXCEPTION
+when Zero_divide then
+dbms_output.put_line(' You ar etrying to divide by zero');
+when my_FirstException then
+dbms_output.put_line(' Divisior  Is Greater than  Input ');
+end;
+
+
+
+
+anonymous block completed
+The Quotient is 0
+ n2  Is Greater than  n1 
+
+anonymous block completed
+The Quotient is 0
+ Divisior  Is Greater than  Input 
+
+anonymous block completed
+ You ar etrying to divide by zero
+
+
+

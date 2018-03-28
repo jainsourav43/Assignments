@@ -1,0 +1,6 @@
+Time point AllElectronics HighTech
+t1 6 20
+t2 X 10
+t3 4 14
+t4 3 X
+t5 2 5

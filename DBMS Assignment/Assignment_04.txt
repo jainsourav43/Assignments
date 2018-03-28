@@ -1,0 +1,485 @@
+1. Write the PL/SQL script to display the employee_name, job, salary and department_number from the employee table.
+
+
+
+
+
+
+set serveroutput on 
+declare 
+e_name VARCHAR2(10);
+e_salary NUMBER(10);
+e_dno NUMBER(10);
+cursor e_cursor is
+select empname,empsalary,deptno
+from employeedata;
+
+begin 
+open e_cursor;
+loop
+fetch e_cursor into e_name,e_salary,e_dno;
+exit when e_cursor%notfound;
+dbms_output.put_line(e_name||' '||e_salary||'  '||e_dno);
+end loop;
+close e_cursor;
+end;
+
+
+
+
+
+
+anonymous block completed
+Sourav 50000  15
+Vinay 50000  41
+Raman 6123  47
+Raghav 98563  85
+John 4587  6
+
+
+
+
+
+
+2. Write a PL/SQL script to increase the salary as per following criteria:
+SALARY AMT INCREMENTED BY
+<1200 8%
+<2500 12%
+<4500 15%
+OTHERWISE 20%
+
+
+
+
+
+
+
+set serveroutput on 
+declare 
+e_name VARCHAR2(10);
+e_salary float(5);
+e_dno NUMBER(10);
+var float(5) ;
+cursor e_cursor is
+select empname,empsalary,deptno
+from employeedata;
+begin 
+open e_cursor;
+loop
+exit when e_cursor%notfound;
+fetch e_cursor into e_name,e_salary,e_dno;
+if (e_salary<1200) then 
+var:=1.08;
+elsif (e_salary <1500) then
+var:=1.12;
+elsif(e_salary <2500) then 
+var:=1.15;
+else 
+var:=1.20;
+end if ;
+update employeedata set employeedata.empsalary=employeedata.empsalary*var;
+end loop;
+close e_cursor;
+end;
+
+
+
+
+
+
+Sourav 6100  15
+Vinay 12000  41
+Raman 75000  47
+Raghav 50000  85
+John 1100  6
+
+
+
+
+3. Write the PL/SQL script to display the employee_name, job, salary of particular department that is input by
+ user using parameter.\
+
+
+
+
+set serveroutput on 
+declare 
+e_name VARCHAR2(10);
+e_salary float(5);
+e_dno NUMBER(10);
+var int (5) ;
+cursor e_cursor is
+select empname,empsalary,deptno
+from employeedata;
+begin 
+open e_cursor;
+var:= &enterdept;
+loop
+exit when e_cursor%notfound;
+fetch e_cursor into e_name,e_salary,e_dno;
+if(e_dno=var) THen
+dbms_output.put_line(e_name||' '||e_salary||'  '||e_dno);
+end if;
+end loop;
+close e_cursor;
+end;
+
+
+
+
+
+anonymous block completed
+Vinay 29000  47
+Raman 200000  47
+
+
+
+4. Write a PL/SQL script to display the name, salary and bonus (salary * .12) for each employee using cursor for loop.
+
+
+
+
+
+
+
+
+set serveroutput on 
+declare 
+e_name VARCHAR2(10);
+e_salary float(5);
+e_dno NUMBER(10);
+var int (5) ;
+cursor e_cursor is
+select empname,empsalary,deptno
+from employeedata;
+begin 
+open e_cursor;
+loop
+fetch e_cursor into e_name,e_salary,e_dno;
+exit when e_cursor%notfound;
+dbms_output.put_line(e_name||'   salary =  '||e_salary||' bonus = '||e_dno*.12);
+end loop;
+close e_cursor;
+end;
+
+
+
+anonymous block completed
+Sourav   salary =  15000 bonus = 1.8
+Vinay   salary =  29000 bonus = 5.64
+Raman   salary =  200000 bonus = 5.64
+Raghav   salary =  120000 bonus = 10.2
+John   salary =  2800 bonus = .72
+
+
+
+
+5. Write a PL/SQL procedure called Multi_table that take two numbers as parameter and display the product 
+of first number till second number;
+
+
+
+declare 
+a int ;
+b int ;
+c int ;
+d int ;
+temp int;
+ procedure myfirst(x1 in int  ,x2 in int )is 
+
+ begin
+ c:=x1; d:=x2;
+ temp:=x1;
+ loop
+ c:=c*temp;
+ d:=d-1;
+dbms_output.put_line(c);
+exit when d=0;
+end loop;
+end;
+
+
+
+
+
+anonymous block completed
+4
+8
+16
+32
+64
+
+
+
+
+6. Write a PL/SQL procedure that take the department_number as parameter and display the name and salary of
+ employees working in that department and return the sum of salary of such employees using out parameter.
+
+
+
+set serveroutput on 
+declare 
+a int ;
+b int ;
+c int ;
+d int ;
+res int ;
+sum_ int ;
+temp int;
+e_name VARCHAR2(10);
+e_salary float(5);
+e_dno NUMBER(10);
+var int (5) ;
+cursor e_cursor is
+select empname,empsalary,deptno
+from employeedata;
+ procedure myfirst(x1 in int  ,x2 out int)is 
+
+ begin
+ sum_:=0;
+ open  e_cursor;
+ c:=x1;
+ temp:=x1;
+ loop
+ fetch e_cursor into e_name,e_salary,e_dno;
+ exit when e_cursor%notfound;
+ 
+if(e_dno=c) then
+sum_:=sum_+e_salary;
+dbms_output.put_line(e_name||' '||e_salary||'  '||e_dno);
+end if;
+end loop;
+dbms_output.put_line(sum_);
+end;
+
+
+begin
+a:=2;
+b:=5;
+res:=&enter;
+myfirst(res,b);
+end;
+
+
+
+anonymous block completed
+Vinay 29000  47
+Raman 200000  47
+229000
+
+
+7. Write a procedure raise_sal, which increases the salary of an employee. It accepts employee’s number and salary increment amount.
+
+
+
+
+
+
+
+
+
+
+
+
+
+set serveroutput on ;
+declare 
+a int ;
+b int ;
+c int ;
+d int ;
+res int ;
+res2 INT ;
+sum_ int ;
+temp int;
+e_name VARCHAR2(10);
+e_salary float(5);
+e_no NUMBER(10);
+var int (5) ;
+cursor e_cursor is
+select empname,empsalary,empno
+from employeedata;
+
+ procedure myfirst(x1 in int, x2 in int) is 
+ begin
+ sum_:=0;
+ open  e_cursor;
+ c:=x1;
+ d:=x2;
+ temp:=x1;
+ loop
+ fetch e_cursor into e_name,e_salary,e_no;
+ exit when e_cursor%notfound;
+if(e_no=c) then
+update employeedata
+set employeedata.empsalary= employeedata.empsalary+d;
+dbms_output.put_line(e_name||' '||e_salary||'  '||e_no);
+end if;
+end loop;
+close e_cursor;
+end;
+
+
+begin
+a:=2;
+b:=5;
+res:=&enter;
+res2:=&ENTERINCREMENT;
+myfirst(res,res2);
+end;
+
+
+
+
+anonymous block completed
+Sourav 15000  1
+
+
+
+8. Write a PL/SQL function power that takes two numbers as arguments and returns the value of the first number raised to the power of the second.
+
+
+
+
+
+
+
+
+
+
+declare 
+a int ;
+b int ;
+c1 int ;
+c int ;
+d int ;
+temp int;
+ procedure myfirst(x1 in int  ,x2 in int,x3 out int )is 
+
+ begin
+ c:=x1; d:=x2;
+ temp:=x1;
+ loop
+ c:=c*temp;
+ d:=d-1;
+dbms_output.put_line(c);
+x3:=c;
+exit when d=0;
+end loop;
+end;
+
+begin  
+a:=&entera;
+b:=&enterb;
+myfirst(a,b,c1);
+dbms_output.put_line('c1 = '||c1);
+end;
+
+
+
+
+
+9. Write a set of triggers to maintain the employee_name and department_name fields redundantly in the employee-department relation , 
+so that you donot have to join the employee and department tables just to get a simple department listing
+
+
+
+
+
+
+
+create or replace trigger mytrigger
+before insert on employee
+for each row
+declare vname VARCHAR2(20);
+begin
+select dname
+into vname
+from department 
+where :new.did=department.did;
+insert into employees_department values(:new.eid,:new.did,:new.ename,vname);
+
+end;
+
+
+
+
+1 rows inserted
+Hii 
+
+
+
+
+10. Write a trigger that verifies the joining date when a new row is inserted in the Employee table. Joining date should be greater or equal 
+to current date.
+
+
+
+
+
+declare 
+myexception exception;
+pragma exception_init(myexception,-20000);
+begin 
+insert into employee values(58,'Bro',29837,'3-oct-2009','CHEM');
+exception WHEN myexception then 
+dbms_output.put_line('Hii  welcome in exception');
+end ;
+   
+
+
+
+  (other option too)
+declare
+begin 
+insert into employee values(58,'Bro',29837,'3-oct-2009','CHEM');
+exception WHEN othersthen 
+dbms_output.put_line('Hii  welcome in exception');
+end ;
+
+
+
+
+---------------------------------------
+
+anonymous block completed
+Hii  welcome in exception
+
+
+
+
+
+
+
+11. Write a trigger that is fired before any row is inserted in the Employee table
+
+
+
+
+
+create or replace
+TRIGGER TRIGGER1
+BEFORE INSERT ON EMPLOYEE
+FOR EACH ROW 
+--when(new.joiningdate< sysdate)
+BEGIN
+dbms_output.put_line('Hii ');
+--RAISE_APPLICATION_ERROR(-20000,'dates of joining is invalid ');
+END;
+
+
+
+
+insert into employee values(58,'Bro',29837,'3-oct-2009','CHEM');
+
+
+------------------------------------------------------------------------------------------
+Hii 
+
+
+
+
+
+
+
+
